@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/babblebey/private-key-converter)
 
-This is a tiny project that allows you to convert private key formats on a web page. Currently, it supports conversion from `PKCS#1` to `PKCS#8`.
+This is a tiny project that allows you to convert private key formats through a web interface. Currently, it supports conversion from `PKCS#1` to `PKCS#8`.
 
 ## Getting Started
 
