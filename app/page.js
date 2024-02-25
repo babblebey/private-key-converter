@@ -160,7 +160,7 @@ export default function Home() {
               <label className="flex items-center justify-center h-16 px-3 py-2 text-sm whitespace-no-wrap duration-150 border rounded hover:border-zinc-100/80 border-zinc-600 focus:border-zinc-100/80 focus:ring-0 text-zinc-100 hover:text-white hover:cursor-pointer" 
                 for="keyfilePicker"
               >
-                Upload a file
+                Upload key file
               </label>
               <input
                 type="file"
