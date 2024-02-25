@@ -3,10 +3,10 @@
 import { useState, Fragment } from "react";
 import { Title } from "@/components/Title";
 import { Error } from "@/components/Error";
+import { Success } from "@/components/Success";
 import { Cog6ToothIcon, ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from "@heroicons/react/24/outline";
 
 import { convert_PKCS1_to_PKCS8 } from "./actions";
-import { Success } from "@/components/Success";
 
 const keyTypes = {
   pkcs1: {
@@ -47,6 +47,15 @@ export default function Home() {
     setLoading(false);
   };
 
+  function handleFileUpload(file = document.querySelector("#keyfilePicker").files[0]) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const contents = reader.result;
+      setInputKey(contents);
+    }
+    reader.readAsText(file);
+  }
+
   return (
     <div className="container px-8 mx-auto mt-16 lg:mt-32">
       {outputKey ? (
@@ -56,7 +65,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             <pre className="px-4 py-3 mt-8 font-mono text-left bg-transparent border rounded border-zinc-600 focus:border-zinc-100/80 focus:ring-0 sm:text-sm text-zinc-100">
               <div className="flex items-start px-1 pt-6 relative text-sm">
-                <label for="inputKey" className="absolute top-0 text-xs font-medium text-zinc-100">
+                <label htmlFor="inputKey" className="absolute top-0 text-xs font-medium text-zinc-100">
                   { keyTypes[outputFormat].title }
                 </label>
                 <div aria-hidden="true" className="pr-4 font-mono border-r select-none border-zinc-300/5 text-zinc-700">
@@ -118,7 +127,7 @@ export default function Home() {
 
           <pre className="px-4 py-3 mt-8 font-mono text-left bg-transparent border rounded border-zinc-600 focus:border-zinc-100/80 focus:ring-0 sm:text-sm text-zinc-100">
             <div className="flex items-start px-1 text-sm pt-6 relative">            
-              <label for="inputKey" className="absolute top-0 text-xs font-medium text-zinc-100">
+              <label htmlFor="inputKey" className="absolute top-0 text-xs font-medium text-zinc-100">
                 { keyTypes[inputFormat].title }
               </label>
               <div aria-hidden="true" className="pr-4 font-mono border-r select-none border-zinc-300/5 text-zinc-700">
@@ -147,7 +156,22 @@ export default function Home() {
           </pre>
 
           <div className="flex flex-col items-center justify-between w-full gap-4 mt-4 sm:flex-row">
-            <div className="relative w-full h-16 px-3 py-2 duration-150 border rounded sm:w-2.5/5 hover:border-zinc-100/80 border-zinc-600 focus-within:border-zinc-100/80 focus-within:ring-0">
+            <div className="w-full md:w-1/5">
+              <label className="flex items-center justify-center h-16 px-3 py-2 text-sm whitespace-no-wrap duration-150 border rounded hover:border-zinc-100/80 border-zinc-600 focus:border-zinc-100/80 focus:ring-0 text-zinc-100 hover:text-white hover:cursor-pointer" 
+                for="keyfilePicker"
+              >
+                Upload a file
+              </label>
+              <input
+                type="file"
+                id="keyfilePicker"
+                name="keyfilePicker"
+                accept=".txt,.pem" 
+                className="hidden"
+                onChange={(e) => handleFileUpload(e.target.files[0]) }
+              />
+            </div>
+            <div className="relative w-full h-16 px-3 py-2 duration-150 border rounded sm:w-2/5 hover:border-zinc-100/80 border-zinc-600 focus-within:border-zinc-100/80 focus-within:ring-0">
               <div className="flex items-center justify-between h-full">
                 <label for="inputFormat" className="block text-xs font-medium text-zinc-100">
                   FROM
@@ -163,7 +187,7 @@ export default function Home() {
                 </select>
               </div>
             </div>
-            <div className="relative w-full h-16 px-3 py-2 duration-150 border rounded sm:w-2.5/5 hover:border-zinc-100/80 border-zinc-600 focus-within:border-zinc-100/80 focus-within:ring-0 ">
+            <div className="relative w-full h-16 px-3 py-2 duration-150 border rounded sm:w-2/5 hover:border-zinc-100/80 border-zinc-600 focus-within:border-zinc-100/80 focus-within:ring-0">
               <div className="flex items-center justify-between h-full">
                 <label for="outputFormat" className="block text-xs font-medium text-zinc-100">
                   TO
@@ -185,7 +209,7 @@ export default function Home() {
             type="submit"
             disabled={loading}
             className={`mt-8 w-full h-12 inline-flex justify-center items-center transition-all rounded px-4 py-1.5 md:py-2 text-base font-semibold leading-7 text-zinc-800 bg-zinc-200 ring-1 duration-150 hover:text-black hover:drop-shadow-cta hover:bg-white 
-            ${ loading && "animate-pulse" }
+              ${ loading && "animate-pulse" }
             `}
             >
             <span>{loading ? <Cog6ToothIcon className="w-5 h-5 animate-spin" /> : "Convert"}</span>
