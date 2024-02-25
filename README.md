@@ -6,6 +6,12 @@ This is a tiny project that allows you to convert private key formats through a 
 
 ## Getting Started
 
+### Use Quickly
+
+Go to: https://private-key-converter.vercel.app/
+
+### Run Locally
+
 1. Install dependencies:
 
    ```sh
@@ -20,7 +26,7 @@ This is a tiny project that allows you to convert private key formats through a 
 
 3. Open your browser and navigate to `http://localhost:3000`.
 
-4. Use the web interface; paste a PKCS#1 private key file and convert it to PKCS#8 format.
+4. Use the web interface; paste a `PKCS#1` private key and convert it to `PKCS#8` format.
 
 ## Contributing
 
