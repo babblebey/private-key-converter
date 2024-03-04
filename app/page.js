@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { Title } from "@/components/Title";
 import { Error } from "@/components/Error";
 import { Success } from "@/components/Success";
@@ -56,6 +56,35 @@ export default function Home() {
     reader.readAsText(file);
   }
 
+  function resetProcess() {
+    setInputKey("");
+    setOutputKey(null)
+  }
+
+  useEffect(() => {
+    const dropzone = document.querySelector("body");
+    const dropbox = dropzone.querySelector("#dropbox");
+    
+    const stopDefault = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    };
+
+    dropzone.ondragover = (e) => {
+      stopDefault(e);
+      dropbox.style.display = "flex";
+    };
+
+    dropzone.ondragenter = (e) => stopDefault(e);
+
+    dropzone.ondrop = (e) => {
+      stopDefault(e);
+      dropbox.style.display = "none";
+      if (inputKey || outputKey) resetProcess();
+      handleFileUpload(e.dataTransfer.files[0]);
+    }
+  }, []);
+
   return (
     <div className="container px-8 mx-auto mt-16 lg:mt-32">
       {outputKey ? (
@@ -90,10 +119,7 @@ export default function Home() {
               <button
                 type="button"
                 className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium duration-150 border rounded text-zinc-300 border-zinc-300/40 hover:border-zinc-300 focus:outline-none hover:text-white"
-                onClick={() => {
-                  setInputKey("");
-                  setOutputKey(null);
-                }}
+                onClick={() => resetProcess()}
               >
                 Convert another
               </button>
