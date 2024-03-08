@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { Title } from "@/components/Title";
 import { Error } from "@/components/Error";
 import { Success } from "@/components/Success";
@@ -19,10 +19,20 @@ const keyTypes = {
   }
 }
 
+const supportedFileTypes = [
+  "pem",
+  "txt"
+];
+
+const initError = {
+  status: false,
+  message: ""
+}
+
 export default function Home() {
-  const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(initError);
 
   const [inputKey, setInputKey] = useState("");
   const [outputKey, setOutputKey] = useState(null);
@@ -30,7 +40,7 @@ export default function Home() {
   const [outputFormat, setOutputFormat] = useState("pkcs8");
 
   async function handleSubmit() {
-    setError(false);
+    setError(initError);
     setLoading(true);
 
     const { key, error } = await convert_PKCS1_to_PKCS8(inputKey);
@@ -40,14 +50,20 @@ export default function Home() {
       document.documentElement.scrollTop = 0;
     };
     if (error) {
-      setError(error);
-      document.querySelector("#error")?.scrollIntoView();
+      displayError("Conversion type not supported");
     };
 
     setLoading(false);
   };
 
   function handleFileUpload(file = document.querySelector("#keyfilePicker").files[0]) {
+    const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
+    if (!supportedFileTypes.includes(fileExtension)) {
+      return displayError("File type upload not supported");
+    }
+
+    setError(initError);
+
     const reader = new FileReader();
     reader.onload = () => {
       const contents = reader.result;
@@ -55,6 +71,40 @@ export default function Home() {
     }
     reader.readAsText(file);
   }
+
+  function displayError(message) {
+    setError({status: true, message});
+    document.querySelector("#error")?.scrollIntoView();
+  }
+
+  function resetProcess() {
+    setInputKey("");
+    setOutputKey(null)
+  }
+
+  useEffect(() => {
+    const dropzone = document.querySelector("body");
+    const dropbox = dropzone.querySelector("#dropbox");
+    
+    const stopDefault = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    };
+
+    dropzone.ondragover = (e) => {
+      stopDefault(e);
+      dropbox.style.display = "flex";
+    };
+
+    dropzone.ondragenter = (e) => stopDefault(e);
+
+    dropzone.ondrop = (e) => {
+      stopDefault(e);
+      dropbox.style.display = "none";
+      if (inputKey || outputKey) resetProcess();
+      handleFileUpload(e.dataTransfer.files[0]);
+    }
+  }, []);
 
   return (
     <div className="container px-8 mx-auto mt-16 lg:mt-32">
@@ -90,10 +140,7 @@ export default function Home() {
               <button
                 type="button"
                 className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium duration-150 border rounded text-zinc-300 border-zinc-300/40 hover:border-zinc-300 focus:outline-none hover:text-white"
-                onClick={() => {
-                  setInputKey("");
-                  setOutputKey(null);
-                }}
+                onClick={() => resetProcess()}
               >
                 Convert another
               </button>
@@ -218,7 +265,7 @@ export default function Home() {
       )}
 
       <div id="error">
-        {error && <Error />}
+        {error.status && <Error message={error.message}/>}
       </div>
     </div>
   )
