@@ -50,8 +50,7 @@ export default function Home() {
       document.documentElement.scrollTop = 0;
     };
     if (error) {
-      setError({status: true, message: "Conversion type not supported"});
-      document.querySelector("#error")?.scrollIntoView();
+      displayError("Conversion type not supported");
     };
 
     setLoading(false);
@@ -60,10 +59,7 @@ export default function Home() {
   function handleFileUpload(file = document.querySelector("#keyfilePicker").files[0]) {
     const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
     if (!supportedFileTypes.includes(fileExtension)) {
-      return setError({
-        status: true, 
-        message: "File type upload not supported"
-      });
+      return displayError("File type upload not supported");
     }
 
     setError(initError);
@@ -74,6 +70,11 @@ export default function Home() {
       setInputKey(contents);
     }
     reader.readAsText(file);
+  }
+
+  function displayError(message) {
+    setError({status: true, message});
+    document.querySelector("#error")?.scrollIntoView();
   }
 
   function resetProcess() {
