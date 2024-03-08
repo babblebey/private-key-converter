@@ -19,10 +19,20 @@ const keyTypes = {
   }
 }
 
+const supportedFileTypes = [
+  "pem",
+  "txt"
+];
+
+const initError = {
+  status: false,
+  message: ""
+}
+
 export default function Home() {
-  const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(initError);
 
   const [inputKey, setInputKey] = useState("");
   const [outputKey, setOutputKey] = useState(null);
@@ -30,7 +40,7 @@ export default function Home() {
   const [outputFormat, setOutputFormat] = useState("pkcs8");
 
   async function handleSubmit() {
-    setError(false);
+    setError(initError);
     setLoading(true);
 
     const { key, error } = await convert_PKCS1_to_PKCS8(inputKey);
@@ -40,7 +50,7 @@ export default function Home() {
       document.documentElement.scrollTop = 0;
     };
     if (error) {
-      setError(error);
+      setError({status: true, message: "Conversion type not supported"});
       document.querySelector("#error")?.scrollIntoView();
     };
 
@@ -48,6 +58,16 @@ export default function Home() {
   };
 
   function handleFileUpload(file = document.querySelector("#keyfilePicker").files[0]) {
+    const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
+    if (!supportedFileTypes.includes(fileExtension)) {
+      return setError({
+        status: true, 
+        message: "File type upload not supported"
+      });
+    }
+
+    setError(initError);
+
     const reader = new FileReader();
     reader.onload = () => {
       const contents = reader.result;
@@ -244,7 +264,7 @@ export default function Home() {
       )}
 
       <div id="error">
-        {error && <Error />}
+        {error.status && <Error message={error.message}/>}
       </div>
     </div>
   )
