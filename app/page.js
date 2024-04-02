@@ -129,8 +129,8 @@ export default function Home() {
                       id="oneline" 
                       name="oneline" 
                       className="rounded-sm"
-                      value={oneline}
-                      onChange={(e) => setOneline(e.target.value)}
+                      checked={oneline}
+                      onChange={(e) => setOneline(prevState => !prevState)}
                     />
                   </span>
                 </div>
