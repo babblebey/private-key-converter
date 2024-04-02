@@ -33,6 +33,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(initError);
+  const [oneline, setOneline] = useState(false);
 
   const [inputKey, setInputKey] = useState("");
   const [outputKey, setOutputKey] = useState(null);
@@ -128,12 +129,14 @@ export default function Home() {
                       id="oneline" 
                       name="oneline" 
                       className="rounded-sm"
+                      value={oneline}
+                      onChange={(e) => setOneline(e.target.value)}
                     />
                   </span>
                 </div>
                 <div aria-hidden="true" className="pr-4 font-mono border-r select-none border-zinc-300/5 text-zinc-700">
                   {Array.from({
-                    length: outputKey.split("\n").length,
+                    length: oneline ? 1 : outputKey.split("\n").length,
                   }).map((_, index) => (
                     <Fragment key={index}>
                       {(index + 1).toString().padStart(2, "0")}
@@ -141,18 +144,22 @@ export default function Home() {
                     </Fragment>
                   ))}
                 </div>
-                <textarea
-                  type="text"
-                  readOnly
-                  className="w-full pl-4 p-0 text-base bg-transparent border-0 appearance-none resize-none hover:resize text-zinc-100 placeholder-zinc-500 focus:ring-0 sm:text-sm"
-                  value={outputKey}
-                  rows={Math.max(5, outputKey?.split("\n").length)}
-                />
-                {/* <div>
-                  <pre className="flex overflow-x-auto">
-                    <code className="px-4 text-left">{outputKey}</code>
-                  </pre>
-                </div> */}
+                { oneline ? (
+                  <input
+                    type="text"
+                    readOnly
+                    className="w-full pl-4 p-0 text-base bg-transparent border-0 appearance-none resize-none hover:resize text-zinc-100 placeholder-zinc-500 focus:ring-0 sm:text-sm"
+                    value={outputKey?.replace(/\n/g, '\\n')}
+                  />
+                ) : (
+                  <textarea
+                    type="text"
+                    readOnly
+                    className="w-full pl-4 p-0 text-base bg-transparent border-0 appearance-none resize-none hover:resize text-zinc-100 placeholder-zinc-500 focus:ring-0 sm:text-sm"
+                    value={outputKey}
+                    rows={Math.max(5, outputKey?.split("\n").length)}
+                  />
+                ) }
               </div>
             </pre>
 
