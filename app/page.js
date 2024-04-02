@@ -115,9 +115,22 @@ export default function Home() {
           <div className="max-w-3xl mx-auto">
             <pre className="px-4 py-3 mt-8 font-mono text-left bg-transparent border rounded border-zinc-600 focus:border-zinc-100/80 focus:ring-0 sm:text-sm text-zinc-100">
               <div className="flex items-start px-1 pt-6 relative text-sm">
-                <label htmlFor="inputKey" className="absolute top-0 text-xs font-medium text-zinc-100">
-                  { keyTypes[outputFormat].title }
-                </label>
+                <div className="absolute top-0 w-full flex items-center justify-between">
+                  <label htmlFor="outputKey" className="text-xs font-medium text-zinc-100">
+                    { keyTypes[outputFormat].title }
+                  </label>
+                  <span className="flex items-center space-x-2">
+                    <label for="oneline" htmlFor="oneline" className="text-xs uppercase font-medium text-zinc-100">
+                      Oneline
+                    </label>
+                    <input 
+                      type="checkbox" 
+                      id="oneline" 
+                      name="oneline" 
+                      className="rounded-sm"
+                    />
+                  </span>
+                </div>
                 <div aria-hidden="true" className="pr-4 font-mono border-r select-none border-zinc-300/5 text-zinc-700">
                   {Array.from({
                     length: outputKey.split("\n").length,
