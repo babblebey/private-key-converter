@@ -149,11 +149,10 @@ export default function Home() {
                     type="text"
                     readOnly
                     className="w-full pl-4 p-0 text-base bg-transparent border-0 appearance-none resize-none hover:resize text-zinc-100 placeholder-zinc-500 focus:ring-0 sm:text-sm"
-                    value={outputKey?.replace(/\n/g, '\\n')}
+                    value={outputKey?.replace(/\n/g, "\\n")}
                   />
                 ) : (
                   <textarea
-                    type="text"
                     readOnly
                     className="w-full pl-4 p-0 text-base bg-transparent border-0 appearance-none resize-none hover:resize text-zinc-100 placeholder-zinc-500 focus:ring-0 sm:text-sm"
                     value={outputKey}
@@ -215,7 +214,6 @@ export default function Home() {
                 ))}
               </div>
               <textarea
-                type="text"
                 name="inputKey"
                 id="inputKey"
                 required
