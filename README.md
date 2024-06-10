@@ -1,6 +1,6 @@
 # Private Key Converter
 
-![GitHub](https://img.shields.io/github/license/babblebey/private-key-converter)
+![GitHub](https://img.shields.io/github/license/babblebey/private-key-converter) [![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
 This is a tiny project that allows you to convert private key formats through a web interface. Currently, it supports conversion from `PKCS#1` to `PKCS#8`.
 
