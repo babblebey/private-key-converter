@@ -174,7 +174,11 @@ export default function Home() {
                 type="button"
                 className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium duration-150 border rounded text-zinc-700 border-zinc-300 bg-zinc-50 hover focus:border-zinc-500 focus:outline-none hover:text-zinc-50 hover:bg-zinc-900"
                 onClick={() => {
-                  navigator.clipboard.writeText(outputKey);
+                  navigator.clipboard.writeText(
+                    oneline 
+                      ? outputKey?.replace(/\n/g, "\\n") 
+                      : outputKey
+                  );
                   setCopied(true);
                 }}
               >
